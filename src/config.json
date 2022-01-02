@@ -1,0 +1,8 @@
+{
+  "fileType": "tsx",
+  "typescript": true,
+  "barrel": true,
+  "scss": false,
+  "test": true,
+  "story": false
+}
