@@ -30,8 +30,6 @@ export default function renderFile ({
   }
 
   ejs.renderFile(templatePath, renderFileData, options, (err: any, str: any) => {
-    console.log('str :>> ', str);
-    console.log('err :>> ', err);
     if (err) {
       throw err;
     } else {

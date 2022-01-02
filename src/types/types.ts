@@ -1,5 +1,6 @@
 export interface Config {
   "fileType": "ts" | "js" | "tsx" | "jsx";
+  "reactFileType": "tsx" | "jsx";
   "typescript": boolean,
   "barrel": boolean,
   "scss": boolean,

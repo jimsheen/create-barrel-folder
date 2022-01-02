@@ -1,0 +1,30 @@
+import React from 'react'
+import { render, screen } from '@testing-library/react';
+
+import <%= name %>, { <%= name %>Props } from './<%= name %>'
+
+const defaultProps = {} as <%= name %>Props
+
+const setup = (props?: <%= name %>Props) => {
+  const newProps = {
+  ...defaultProps,
+  ...props
+  } as <%= name %>Props;
+
+  const utils = render(<<%= name %> {...newProps} />);
+
+  // example of how to query an element
+  const element = () => screen.queryByText('some element')
+
+  return {
+    ...utils,
+    element
+  }
+}
+
+describe('${name}', () => {
+  it('should render', () => {
+    const { element } = setup()
+    expect(element()).toBeInTheDocument()
+  })
+})

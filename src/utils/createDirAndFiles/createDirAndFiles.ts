@@ -27,7 +27,6 @@ export default async function createDirAndFiles (moduleName: string, config: Con
   if (config.barrel) {
     let fileType = config.fileType === 'tsx' || config.fileType === 'ts' ? 'ts' : 'js';
     try {
-      // await fs.writeFile(`${dirPath}/index.ts`, indexFile)
       renderFile({
         templatePath: indexTmpl,
         dirPath,
@@ -42,8 +41,37 @@ export default async function createDirAndFiles (moduleName: string, config: Con
   }
 
   if (config.type === 'rfc') {
+    // TODO - add tsx condition
+    const rfcTmpl = path.resolve(__dirname, '../../templates/rfc-tsx.ejs');
+    try {
+      renderFile({
+        templatePath: rfcTmpl,
+        dirPath,
+        fileName: `${moduleName}.${config.reactFileType}`,
+        moduleName,
+        config
+      })
+    }
+    catch (err: any) {
+      if (err) throw err
+    }
 
+  }
 
+  if (config.test) {
+    const testTmpl = path.resolve(__dirname, '../../templates/test-tsx.ejs');
+    try {
+      renderFile({
+        templatePath: testTmpl,
+        dirPath,
+        fileName: `${moduleName}.test.${config.fileType}`,
+        moduleName,
+        config
+      })
+    }
+    catch (err: any) {
+      if (err) throw err
+    }
   }
 
 }

@@ -1,0 +1,16 @@
+import React from 'react'
+<%if (scss) { %>
+import './<%= name %>.scss'<% }
+-%>
+
+export interface <%= name %>Props {}
+
+const <%= name %> = ({}: <%= name %>Props) => {
+  return (
+    <>
+      <h1><%= name %></h1>
+    </>
+  )
+}
+
+export default <%= name %>

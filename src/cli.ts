@@ -15,6 +15,8 @@ const defaultConfig = {
   type: "rfc"
 } as Config
 
+defaultConfig.reactFileType = defaultConfig.typescript ? 'tsx' : 'jsx';
+
 // cli options
 const optionDefinitions = [{
   name: 'src',
