@@ -1,5 +1,5 @@
 {
-  "name": "create-barrel-folder",
+  "name": "@jimsheen/create-barrel-folder",
   "version": "0.2.2",
   "description": "",
   "main": "dist/cjs/index.js",
@@ -24,8 +24,7 @@
     "package": "npm run build && npm pack",
     "test": "jest --no-cache --runInBand",
     "test:cov": "jest --coverage --no-cache --runInBand",
-    "test:watch": "jest --watchAll --no-cache --runInBand",
-    "addscope": "node tools/packagejson name @tomchen/example-typescript-package"
+    "test:watch": "jest --watchAll --no-cache --runInBand"
   },
   "publishConfig": {
     "access": "public"
@@ -46,15 +45,15 @@
     "esm",
     "umd"
   ],
-  "author": "Tom Chen <tomchen.org@gmail.com>",
+  "author": "James Sheen <jimsheen@hotmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/tomchen/example-typescript-package",
+  "homepage": "https://github.com/jimsheen/create-barrel-folder",
   "repository": {
     "type": "git",
-    "url": "git@github.com:tomchen/example-typescript-package.git"
+    "url": "git@github.com:jimsheen/create-barrel-folder.git"
   },
   "bugs": {
-    "url": "https://github.com/tomchen/example-typescript-package/issues"
+    "url": "https://github.com/jimsheen/create-barrel-folder/issues"
   },
   "dependencies": {},
   "devDependencies": {

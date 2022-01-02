@@ -1,9 +1,5 @@
-import ejs from 'ejs';
-import path from 'path';
-// import fs from 'fs';
 import fs from 'fs/promises';
 
-import * as renderFile from '../renderFile';
 import createDirAndFiles from '.';
 import { Config } from 'types';
 
@@ -18,7 +14,6 @@ const defaultConfig = {
   "scss": true,
   "test": true,
   "story": true,
-  type: "rfc"
 } as Config
 
 afterEach(() => {

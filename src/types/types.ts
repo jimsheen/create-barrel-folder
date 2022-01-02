@@ -6,5 +6,5 @@ export interface Config {
   "scss": boolean,
   "test": boolean,
   "story": boolean,
-  type: "rfc" | "hook"
+  hook: boolean,
 }

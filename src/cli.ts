@@ -6,13 +6,13 @@ import createDirAndFiles from './utils/createDirAndFiles';
 import { Config } from './types';
 
 const defaultConfig = {
-  "fileType": "tsx",
-  "typescript": true,
-  "barrel": true,
-  "scss": true,
-  "test": true,
-  "story": true,
-  type: "rfc"
+  fileType: "tsx",
+  typescript: true,
+  barrel: true,
+  scss: false,
+  test: false,
+  story: false,
+  hook: false
 } as Config
 
 defaultConfig.reactFileType = defaultConfig.typescript ? 'tsx' : 'jsx';
@@ -59,15 +59,10 @@ const optionDefinitions = [{
   type: String,
   description: 'File type to create (tsx, ts, js, jsx)'
 }, {
-  name: 'type',
-  alias: 't',
-  type: (value: string) => {
-    if (['rfc', 'hook'].includes(value)) {
-      return value;
-    }
-    throw new Error('Invalid type, must be rfc or hook');
-  },
-  description: 'Type of component to create react functional component or hook (rfc, hook) - default is rfc'
+  name: 'hook',
+  alias: 'k',
+  type: Boolean,
+  description: 'Create a React hook'
 }]
 
 const options = commandLineArgs(optionDefinitions)

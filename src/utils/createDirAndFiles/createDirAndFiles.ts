@@ -1,6 +1,5 @@
 import path from 'path';
 import { mkdir } from 'fs/promises';
-import { existsSync } from 'fs';
 import { Config } from 'types';
 import renderFile from '../renderFile';
 
@@ -20,8 +19,6 @@ export default async function createDirAndFiles (moduleName: string, config: Con
     if (err.code !== 'EEXIST') throw err
   }
 
-  const isHook = config.type === 'hook';
-
 
   if (config.barrel) {
     let fileType = config.fileType === 'tsx' || config.fileType === 'ts' ? 'ts' : 'js';
@@ -40,7 +37,7 @@ export default async function createDirAndFiles (moduleName: string, config: Con
   }
 
   // react functional component
-  if (config.type === 'rfc') {
+  if (!config.hook) {
     // TODO - add tsx condition
     const rfcTmpl = path.resolve(__dirname, '../../templates/rfc-tsx.ejs');
     try {
@@ -58,7 +55,7 @@ export default async function createDirAndFiles (moduleName: string, config: Con
   }
 
   // create hook file
-  if (isHook && config.typescript) {
+  if (config.hook && config.typescript) {
     const hookTmpl = path.resolve(__dirname, '../../templates/hook-tsx.ejs');
     try {
       renderFile({
