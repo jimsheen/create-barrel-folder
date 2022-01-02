@@ -1,0 +1,17 @@
+import React from 'react'
+import { Story } from '@storybook/react'
+
+import <%= name %>, { <%= name %>Props } from './<%= name %>'
+
+export default {
+  title: '<%= name %>',
+  component: <%= name %>,
+  parameters: { actions: { argTypesRegex: '^on.*' } },
+  argTypes: {},
+  args: {} as <%= name %>Props
+}
+
+const Template: Story<<%= name %>Props> = (args) => <<%= name %> {...args} />
+
+export const Default = Template.bind({})
+Default.args = {}

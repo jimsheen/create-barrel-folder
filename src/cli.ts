@@ -9,9 +9,9 @@ const defaultConfig = {
   "fileType": "tsx",
   "typescript": true,
   "barrel": true,
-  "scss": false,
+  "scss": true,
   "test": true,
-  "story": false,
+  "story": true,
   type: "rfc"
 } as Config
 
@@ -61,8 +61,13 @@ const optionDefinitions = [{
 }, {
   name: 'type',
   alias: 't',
-  type: String,
-  description: 'Type of component to create rfc or hook (default rfc)'
+  type: (value: string) => {
+    if (['rfc', 'hook'].includes(value)) {
+      return value;
+    }
+    throw new Error('Invalid type, must be rfc or hook');
+  },
+  description: 'Type of component to create react functional component or hook (rfc, hook) - default is rfc'
 }]
 
 const options = commandLineArgs(optionDefinitions)

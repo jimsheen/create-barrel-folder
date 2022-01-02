@@ -1,12 +1,9 @@
 import ejs from 'ejs';
-import fs from 'fs';
 import path from 'path';
 
 import renderFile from './renderFile';
 
 const templatePath = path.resolve(__dirname, './testTemplate.ejs')
-
-const defaultConfig = require('../../config.json');
 
 const mockRenderFile = jest.fn();
 
