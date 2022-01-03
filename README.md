@@ -8,15 +8,9 @@ Create a folder with a barrel index file and options to generate the following:
 - SCSS file
 - index.tsx 
 
-## Installation
-
-```
-npm i -g @jimsheen/create-barrel-folder
-```
-
 ## Usage
 
-```cbf ComponentName```
+```npx create-barrel-folder ComponentName```
 
 creates directory:
 
@@ -52,7 +46,7 @@ export default ComponentName
 
 ## Options
 
-CLI usage options `cbf --help`
+CLI usage options `npx create-barrel-folder --help`
 ```
 Create Barrel File
 
@@ -177,7 +171,7 @@ Default.args = {}
 ```
 
 #### React Hook
-`cbf useHookExample --hook` generates `useHookExample.tsx`
+`npx create-barrel-folder useHookExample --hook` generates `useHookExample.tsx`
 ```
 import React from 'react'
 
