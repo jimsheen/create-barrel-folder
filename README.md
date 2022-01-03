@@ -194,8 +194,13 @@ export default useHookExample
  ## TODO
 
  [ ] - Support Standard JS RFC
+
  [ ] - Add support for proptypes
+ 
  [ ] - Generate class components
+ 
  [ ] - Pass custom config file / default options (possible .rc file (install pacakge locally?))
+ 
  [ ]  - Allow user to pass custom templates
+ 
  [ ] - Generate CSS file

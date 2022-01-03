@@ -44,7 +44,7 @@ const optionDefinitions = [{
 },
 {
   name: 'test',
-  alias: 'j',
+  alias: 't',
   type: Boolean,
   description: 'Create a test file'
 },
