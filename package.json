@@ -24,7 +24,9 @@
     "package": "npm run build && npm pack",
     "test": "jest --no-cache --runInBand",
     "test:cov": "jest --coverage --no-cache --runInBand",
-    "test:watch": "jest --watchAll --no-cache --runInBand"
+    "test:watch": "jest --watchAll --no-cache --runInBand",
+    "addscope": "node tools/packagejson name @jimsheen/create-barrel-folder",
+    "postversion": "git push --follow-tags"
   },
   "publishConfig": {
     "access": "public"
