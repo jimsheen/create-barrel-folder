@@ -1,9 +1,8 @@
-import React from 'react'
 <%if (scss) { %> import './<%= name %>.scss'<% } -%>
 
-export interface <%= name %>Props {}
+export type T<%= name %>Props = {}
 
-const <%= name %> = ({}: <%= name %>Props) => {
+const <%= name %> = ({}: T<%= name %>Props) => {
   return (
     <>
       <h1><%= name %></h1>
