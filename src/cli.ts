@@ -1,96 +1,106 @@
 #!/usr/bin/env node
 
-import commandLineArgs from 'command-line-args';
-import commandLineUsage from 'command-line-usage';
-import createDirAndFiles from './utils/createDirAndFiles';
-import { Config } from './types';
+import { QuestionCollection } from 'inquirer'
 
-const defaultConfig = {
-  fileType: "tsx",
-  typescript: true,
-  barrel: true,
-  scss: false,
-  test: false,
-  story: false,
-  hook: false
-} as Config
+enum EComponentType {
+  Component = 'Component',
+  Hook = 'Hook',
+}
 
-defaultConfig.reactFileType = defaultConfig.typescript ? 'tsx' : 'jsx';
+enum EOptions {
+  Barrel = 'Barrel',
+  Story = 'Story',
+  Test = 'Test',
+  Styled = 'Styled',
+}
 
-// cli options
-const optionDefinitions = [{
-  name: 'src',
-  type: String,
-  multiple: true,
-  defaultOption: true
-},
-{
-  name: 'help',
-  alias: 'h',
-  type: Boolean,
-  description: 'Display the usage guide'
-},
-{
-  name: 'proptypes',
-  alias: 'p',
-  type: Boolean,
-  description: 'Create JS file with prop types'
-},
-{
-  name: 'story',
-  alias: 's',
-  type: Boolean,
-  description: 'Create a storybook file'
-},
-{
-  name: 'test',
-  alias: 't',
-  type: Boolean,
-  description: 'Create a test file'
-},
-{
-  name: 'scss',
-  alias: 'c',
-  type: Boolean,
-  description: 'Create an scss file'
-}, {
-  name: 'fileType',
-  alias: 'f',
-  type: String,
-  description: 'File type to create (tsx, ts, js, jsx)'
-}, {
-  name: 'hook',
-  alias: 'k',
-  type: Boolean,
-  description: 'Create a React hook'
-}]
+const componentPrompt: QuestionCollection = {
+  type: 'list',
+  name: 'componentType',
+  message: 'What type of file do you want to create?',
+  choices: [EComponentType.Component, EComponentType.Hook],
+  default: [EComponentType.Component], // TODO - add default to config
+}
 
-const options = commandLineArgs(optionDefinitions)
+const namePromptMessage = (componentType: EComponentType) => {
+  const message = `What is the name of the ${componentType}?`
 
-// usage help guide
-if (options.help) {
-  const usage = commandLineUsage([{
-    header: 'Create Barrel File',
-    content: 'Auto create react files and folder with a barrel file'
-  },
-  {
-    header: 'Options',
-    optionList: optionDefinitions
+  if (componentType === EComponentType.Component) {
+    return message + ' (e.g. Button)'
   }
-  ])
-  console.log(usage)
 
-} else {
-  console.log(options)
+  return message + ' (e.g. useButton)'
+}
+const namePromptFn = (componentType: EComponentType): QuestionCollection => ({
+  type: 'input',
+  name: 'name',
+  message: namePromptMessage(componentType),
+})
+
+const barrelComponentPrompt: QuestionCollection = {
+  type: 'checkbox',
+  name: 'options',
+  message: 'What files do you want to include?',
+  choices: Object.values(EOptions),
+  default: Object.values(EOptions), // TODO - add default to config
 }
 
-// TODO - pass config file or use a .rc file
-const config = {
-  ...defaultConfig,
-  ...options
+async function loadModule() {
+  const inquirer = (await import('inquirer')).default
+
+  // Component type
+  let componentResponse = null
+
+  try {
+    componentResponse = await inquirer.prompt([componentPrompt])
+  } catch {
+    console.log('error')
+  }
+
+  if (!componentResponse) {
+    console.log('No response')
+    return
+  }
+
+  // Name
+  const namePrompt = namePromptFn(componentResponse.componentType)
+
+  let nameResponse = null
+
+  try {
+    nameResponse = await inquirer.prompt([namePrompt])
+  } catch {
+    console.log('Error')
+  }
+
+  if (!nameResponse || !nameResponse.name) {
+    console.error('Error: Name is required!')
+    return
+  }
+
+  // Options
+  if (componentResponse?.componentType.includes(EComponentType.Component)) {
+    let barrelResponse = null
+
+    try {
+      barrelResponse = await inquirer.prompt([barrelComponentPrompt])
+    } catch {
+      console.log('Error')
+    }
+
+    if (!barrelResponse) {
+      console.log('No response')
+      return
+    }
+
+    const { options } = barrelResponse
+
+    console.log('componentResponse :>> ', componentResponse)
+    console.log('nameResponse :>> ', nameResponse)
+    console.log('options :>> ', options)
+
+    // TODO - use these options to create the files
+  }
 }
 
-
-if (options.src && options.src.length > 0) {
-  options.src.forEach((fileName: string) => createDirAndFiles(fileName, config))
-}
+loadModule()

@@ -15,13 +15,13 @@
 
 // render file function - render file based on options
 
-const commandLineArgs = require('command-line-args')
+import commandLineArgs from 'command-line-args'
 
 /* first - parse the main command */
-const mainDefinitions = [
-  { name: 'command', defaultOption: true }
-]
-const mainOptions = commandLineArgs(mainDefinitions, { stopAtFirstUnknown: true })
+const mainDefinitions = [{ name: 'command', defaultOption: true }]
+const mainOptions = commandLineArgs(mainDefinitions, {
+  stopAtFirstUnknown: true,
+})
 const argv = mainOptions._unknown || []
 
 console.log('mainOptions\n===========')
@@ -31,7 +31,7 @@ console.log(mainOptions)
 if (mainOptions.command === 'merge') {
   const mergeDefinitions = [
     { name: 'squash', type: Boolean },
-    { name: 'message', alias: 'm' }
+    { name: 'message', alias: 'm' },
   ]
   const mergeOptions = commandLineArgs(mergeDefinitions, { argv })
 
