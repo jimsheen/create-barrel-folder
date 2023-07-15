@@ -10,7 +10,6 @@
     "cbf": "./dist/esm/cli.js"
   },
   "scripts": {
-    "postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",
     "copy:esm": "copyfiles -u 2 src/templates/**/*.ejs dist/esm/templates",
