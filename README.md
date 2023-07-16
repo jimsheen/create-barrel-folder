@@ -1,16 +1,18 @@
 # Create Barrel Folder
 
-Create a folder with a barrel index file and options to generate the following:
+This CLI tool helps to create a folder with a barrel index file and offers options to generate the following:
+
 - React Functional Component
 - React Hook
-- .test file with testing library and component render setup
-- Storybook .stories
+- Test file with testing library and component render setup
+- Storybook stories
 - SCSS file
-- index.tsx 
+- TypeScript or JavaScript files
+- Support for custom configuration using an `.rc` file
 
 ## Usage
 
-```npx create-barrel-folder ComponentName```
+`npx create-barrel-folder ComponentName`
 
 creates directory:
 
@@ -20,14 +22,16 @@ ComponentName
 - index.ts
 ```
 
-index.ts (barrel file)
-```
+`index.ts` (barrel file)
+
+```ts
 export { default } from './ComponentName'
 export * from './ComponentName'
 ```
 
-ComponentName.tsx
-```
+`ComponentName.tsx`
+
+```ts
 import React from 'react'
 import './ComponentName.scss'
 
@@ -44,157 +48,61 @@ const ComponentName = ({}: ComponentNameProps) => {
 export default ComponentName
 ```
 
-## Options
+## Custom Configuration
 
-CLI usage options `npx create-barrel-folder --help`
-```
-Create Barrel File
+You can define a custom config file in your project root to set default behavior of the tool. The tool will look for the config file in the following order:
 
-  Auto create react files and folder with a barrel file 
+- a package.json property if it is needed
+- a JSON or YAML, JS "rc file" .ggcbfrc or .ggcbfrc.json or .ggcbfrc.js or.ggcbfrc.yml, .ggcbfrc.yaml
 
-Options
+Your custom config file should export an object with the configuration. The default overridable configuration structure is as follows:
 
-  --src string[]                                                                                        
-  -h, --help              Display the usage guide                                                       
-  -p, --proptypes         Create JS file with prop types                                                
-  -s, --story             Create a storybook file                                                       
-  -j, --test              Create a test file                                                            
-  -c, --scss              Create an scss file                                                           
-  -f, --fileType string   File type to create (tsx, ts, js, jsx)                                        
-  -k, --hook              Create a React Hook
-```
-
-## Default Props
-
-```
-export interface Config {
-  "fileType": "ts" | "js" | "tsx" | "jsx";
-  "typescript": boolean,
-  "barrel": boolean,
-  "scss": boolean,
-  "test": boolean,
-  "story": boolean,
-  hook: boolean,
+```js
+// ggcbfrc.js
+module.exports = {
+  component: {
+    barrel: true,
+    story: true,
+    test: true,
+    styled: true,
+    rules: {
+      required: {
+        message: 'Component name is required',
+      },
+      tests: [
+        {
+          validate: (value) => /^[A-Z]/.test(value),
+          message: 'Component name should start with a capital letter',
+        },
+        {
+          validate: (value) => value.length >= 3,
+          message: 'Component name should be at least 3 characters long',
+        },
+      ],
+    },
+  },
+  hook: {
+    barrel: true,
+    test: true,
+    styled: false,
+    rules: {
+      required: {
+        message: 'Hook name is required',
+      },
+      tests: [
+        {
+          validate: (value) => /^use[A-Z]/.test(value),
+          message: "Hook name should start with 'use'",
+        },
+      ],
+    },
+  },
 }
-
-const defaultConfig = {
-  fileType: "tsx",
-  typescript: true,
-  barrel: true,
-  scss: false,
-  test: false,
-  story: false,
-  hook: false,
-  type: "rfc"
-} as Config
 ```
 
-## Generated Files Example
+You can override any of these defaults in your `.cbfrc.js` or `.cbfrc.ts` file. If you are using TypeScript for your `.cbfrc.ts` file, remember to transpile it to JavaScript, as Node.js cannot understand TypeScript natively.
 
-#### React Functional Component `ComponentName.tsx`
-```
-import React from 'react'
-import './ComponentName.scss'
+## TODO
 
-export interface ComponentNameProps {}
-
-const ComponentName = ({}: ComponentNameProps) => {
-  return (
-    <>
-      <h1>ComponentName</h1>
-    </>
-  )
-}
-
-export default ComponentName
-```
-
-#### Test file `ComponentName.test.tsx`
-
-```
-import React from 'react'
-import { render, screen } from '@testing-library/react';
-
-import ComponentName, { ComponentNameProps } from './ComponentName'
-
-const defaultProps = {} as ComponentNameProps
-
-const setup = (props?: ComponentNameProps) => {
-  const newProps = {
-  ...defaultProps,
-  ...props
-  } as ComponentNameProps;
-
-  const utils = render(<ComponentName {...newProps} />);
-
-  // example of how to query an element
-  const element = () => screen.queryByText('some element')
-
-  return {
-    ...utils,
-    element
-  }
-}
-
-describe('ComponentName', () => {
-  it('should render', () => {
-    const { element } = setup()
-    expect(element()).toBeInTheDocument()
-  })
-})
-```
-
-#### Storybook file `ComponentName.stories.tsx`
-```
-import React from 'react'
-import { Story } from '@storybook/react'
-
-import ComponentName, { ComponentNameProps } from './ComponentName'
-
-export default {
-  title: 'ComponentName',
-  component: ComponentName,
-  parameters: { actions: { argTypesRegex: '^on.*' } },
-  argTypes: {},
-  args: {} as ComponentNameProps
-}
-
-const Template: Story<ComponentNameProps> = (args) => <ComponentName {...args} />
-
-export const Default = Template.bind({})
-Default.args = {}
-```
-
-#### SCSS file `ComponentName.scss`
-```
-.ComponentName {}
-```
-
-#### React Hook
-`npx create-barrel-folder useHookExample --hook` generates `useHookExample.tsx`
-```
-import React from 'react'
-
-export interface useHookExampleProps {}
-
-const useHookExample = ({}: useHookExampleProps) => {
-  
-  return {}
-}
-
-export default useHookExample
-```
-
- ## TODO
-
- [ ] - Support Standard JS RFC
-
- [ ] - Add support for proptypes
- 
- [ ] - Generate class components
- 
- [ ] - Pass custom config file / default options (possible .rc file (install pacakge locally?))
- 
- [ ]  - Allow user to pass custom templates
- 
- [ ] - Generate CSS file
+- [ ] Allow user to pass custom templates
+- [x] Support custom `.rc` configuration files

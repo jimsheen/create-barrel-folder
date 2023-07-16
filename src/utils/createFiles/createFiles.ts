@@ -37,20 +37,24 @@ const createFiles = async ({
 
   const currentDefaultConfig = defaultConfig[componentType]
 
-  // if options doesn't have a value that matches the key in defaultTemplateData then it will be set to false
-  const data = Object.keys(currentDefaultConfig).reduce((acc, key) => {
-    if (options.includes(key as EOptions)) {
+  let data = {}
+
+  if (currentDefaultConfig) {
+    // if options doesn't have a value that matches the key in defaultTemplateData then it will be set to false
+    data = Object.keys(currentDefaultConfig).reduce((acc, key) => {
+      if (options.includes(key as EOptions)) {
+        return {
+          ...acc,
+          [key]: true,
+        }
+      }
+
       return {
         ...acc,
-        [key]: true,
+        [key]: false,
       }
-    }
-
-    return {
-      ...acc,
-      [key]: false,
-    }
-  }, {})
+    }, {})
+  }
 
   // create files
 

@@ -17,9 +17,9 @@ export type TRulesType = {
 }
 
 export type TDefaultConfig = {
-  [key in EComponentType]: {
+  [key in EComponentType]?: {
     [key in EOptions]?: boolean
   } & {
-    rules: TRulesType
+    rules?: TRulesType
   }
 }

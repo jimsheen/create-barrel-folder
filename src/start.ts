@@ -1,5 +1,7 @@
 import { color } from 'console-log-colors'
 import prompts from 'prompts'
+import rc from 'rc'
+
 import {
   componentTypeOptions,
   EComponentType,
@@ -29,6 +31,11 @@ const handleAbort = ({ aborted }: { aborted: boolean }): void => {
   }
 }
 
+// merge default config with rc config
+const config = rc('ggcbf', defaultConfig)
+
+console.log('config :>> ', config)
+
 const start = async () => {
   // get component type
   const { componentType } = (await prompts([
@@ -47,7 +54,8 @@ const start = async () => {
     process.exit(0)
   }
 
-  const { rules } = defaultConfig[componentType]
+  // get rules
+  const rules = config[componentType]?.rules || {}
 
   // get component name
   const { componentName } = await prompts([
@@ -73,7 +81,7 @@ const start = async () => {
         ...option,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        selected: defaultConfig[componentType][option.value],
+        selected: config[componentType][option.value],
       })),
       onState: handleAbort,
     },
