@@ -1,5 +1,6 @@
 import fs from 'fs'
 import ejs, { Options } from 'ejs'
+import { color } from 'console-log-colors'
 
 interface RenderFileProps {
   templatePath: string
@@ -30,14 +31,22 @@ function renderFile({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (err: any, str: string) => {
       if (err) {
+        console.error(color.cyan.bgRed.bold.underline('Error'))
+
         throw err
       } else {
         fs.appendFile(
           `${dirPath}/${fileName}`,
           str,
           (err: NodeJS.ErrnoException | null) => {
-            if (err) throw err
-            console.log(`Created ${fileName}`)
+            if (err) {
+              console.error(color.cyan.bgRed.bold.underline('Error'))
+
+              throw err
+            }
+            console.log(
+              color.cyan.bgGreen.bold.underline(`Created ${fileName}`)
+            )
           }
         )
       }

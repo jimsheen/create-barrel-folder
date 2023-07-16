@@ -70,8 +70,6 @@ const handleAbort = ({ aborted }: { aborted: boolean }): void => {
     },
   ])
 
-  console.log('options :>> ', options)
-
   // create files
   await createFiles({
     componentName,
