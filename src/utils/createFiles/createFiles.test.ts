@@ -1,108 +1,137 @@
-import { EOptions, EComponentType, fileOptions } from '../../constants'
-import createFiles from '../createFiles'
-import createDir from '../createDir'
-import renderFile from '../renderFile'
+import path from 'path'
+import { EComponentType, EOptions } from '../../constants'
+import createFiles, { TCreateFilesOptions } from './createFiles'
 
-// Mock the createDir and renderFile functions
-jest.mock('../createDir')
-jest.mock('../renderFile')
+jest.mock('../createDir', () => jest.fn())
+jest.mock('../renderFile', () => jest.fn())
+
+const createDirMock = require('../createDir')
+const renderFileMock = require('../renderFile')
 
 describe('createFiles', () => {
+  let options: TCreateFilesOptions
+
   beforeEach(() => {
-    // Clear all instances and calls to constructor and all methods:
-    ;(createDir as jest.Mock).mockClear()
-    ;(renderFile as jest.Mock).mockClear()
+    // Reset the mock calls before each test
+    createDirMock.mockClear()
+    renderFileMock.mockClear()
+
+    // Default options
+    options = {
+      componentName: 'MyComponent',
+      componentType: EComponentType.Component,
+      options: [],
+    }
+  })
+
+  it('creates a directory', async () => {
+    await createFiles(options)
+    expect(createDirMock).toHaveBeenCalledWith(
+      path.join(process.cwd(), options.componentName)
+    )
   })
 
   describe('component type', () => {
-    it('creates component files correctly', async () => {
-      const mockOptions = [
-        fileOptions[EOptions.Barrel],
-        fileOptions[EOptions.Styled],
-      ]
-      const mockComponentName = 'TestComponent'
-      const mockComponentType = EComponentType.Component
-
-      await createFiles({
-        componentName: mockComponentName,
-        componentType: mockComponentType,
-        options: mockOptions,
-      })
-
-      // Test if renderFile is called correctly for '${componentName}.tsx'
-      expect(renderFile).toBeCalledWith(
-        expect.objectContaining({
-          fileName: `${mockComponentName}.tsx`,
-          moduleName: mockComponentName,
-        })
-      )
+    beforeEach(() => {
+      options.componentType = EComponentType.Component
     })
 
-    it('creates hook files correctly', async () => {
-      const mockOptions = [
-        fileOptions[EOptions.Barrel],
-        fileOptions[EOptions.Styled],
-      ]
-      const mockComponentName = 'TestComponent'
-      const mockComponentType = EComponentType.Hook
-
-      await createFiles({
-        componentName: mockComponentName,
-        componentType: mockComponentType,
-        options: mockOptions,
+    it('creates a barrel file', async () => {
+      options.options.push(EOptions.Barrel)
+      await createFiles(options)
+      expect(renderFileMock).toHaveBeenCalledWith({
+        templatePath: expect.any(String),
+        dirPath: path.join(process.cwd(), options.componentName),
+        fileName: 'index.ts',
+        moduleName: options.componentName,
       })
+    })
 
-      // Test if renderFile is called correctly for 'use${componentName}.ts'
-      expect(renderFile).toBeCalledWith(
-        expect.objectContaining({
-          fileName: `use${mockComponentName}.ts`,
-          moduleName: mockComponentName,
-        })
-      )
+    it('creates a component file', async () => {
+      await createFiles(options)
+      expect(renderFileMock).toHaveBeenCalledWith({
+        templatePath: expect.any(String),
+        dirPath: path.join(process.cwd(), options.componentName),
+        fileName: `${options.componentName}.tsx`,
+        moduleName: options.componentName,
+        data: expect.any(Object),
+      })
+    })
+
+    it('creates a styled component file', async () => {
+      options.options.push(EOptions.Styled)
+      await createFiles(options)
+      expect(renderFileMock).toHaveBeenCalledWith({
+        templatePath: expect.any(String),
+        dirPath: path.join(process.cwd(), options.componentName),
+        fileName: `${options.componentName}.styled.ts`,
+        moduleName: options.componentName,
+        data: expect.any(Object),
+      })
+    })
+
+    it('creates a story file', async () => {
+      options.options.push(EOptions.Story)
+      await createFiles(options)
+      expect(renderFileMock).toHaveBeenCalledWith({
+        templatePath: expect.any(String),
+        dirPath: path.join(process.cwd(), options.componentName),
+        fileName: `${options.componentName}.stories.tsx`,
+        moduleName: options.componentName,
+        data: expect.any(Object),
+      })
+    })
+
+    it('creates a test file', async () => {
+      options.options.push(EOptions.Test)
+      await createFiles(options)
+      expect(renderFileMock).toHaveBeenCalledWith({
+        templatePath: expect.any(String),
+        dirPath: path.join(process.cwd(), options.componentName),
+        fileName: `${options.componentName}.test.tsx`,
+        moduleName: options.componentName,
+        data: expect.any(Object),
+      })
     })
   })
 
-  describe('file options', () => {
-    it('creates barrel files correctly', async () => {
-      const mockOptions = [fileOptions[EOptions.Barrel]]
-      const mockComponentName = 'TestComponent'
-      const mockComponentType = EComponentType.Component
-
-      await createFiles({
-        componentName: mockComponentName,
-        componentType: mockComponentType,
-        options: mockOptions,
-      })
-
-      // Test if renderFile is called correctly for 'index.ts'
-      expect(renderFile).toBeCalledWith(
-        expect.objectContaining({
-          fileName: 'index.ts',
-          moduleName: mockComponentName,
-        })
-      )
+  describe('hook type', () => {
+    beforeEach(() => {
+      options.componentType = EComponentType.Hook
     })
 
-    it('creates styled files correctly', async () => {
-      const mockOptions = [fileOptions[EOptions.Styled]]
-      const mockComponentName = 'TestComponent'
-      const mockComponentType = EComponentType.Component
-
-      await createFiles({
-        componentName: mockComponentName,
-        componentType: mockComponentType,
-        options: mockOptions,
+    it('creates a barrel file', async () => {
+      options.options.push(EOptions.Barrel)
+      await createFiles(options)
+      expect(renderFileMock).toHaveBeenCalledWith({
+        templatePath: expect.any(String),
+        dirPath: path.join(process.cwd(), options.componentName),
+        fileName: 'index.ts',
+        moduleName: options.componentName,
       })
-
-      // Test if renderFile is called correctly for '${componentName}.styled.ts'
-      expect(renderFile).toBeCalledWith(
-        expect.objectContaining({
-          fileName: `${mockComponentName}.styled.ts`,
-          moduleName: mockComponentName,
-        })
-      )
     })
 
-    // Similarly you can add more test cases for EOptions.Story and EOptions.Test
+    it('creates a hook file', async () => {
+      await createFiles(options)
+      expect(renderFileMock).toHaveBeenCalledWith({
+        templatePath: expect.any(String),
+        dirPath: path.join(process.cwd(), options.componentName),
+        fileName: `use${options.componentName}.ts`,
+        moduleName: options.componentName,
+        data: expect.any(Object),
+      })
+    })
+
+    it('creates a test file', async () => {
+      options.options.push(EOptions.Test)
+      await createFiles(options)
+      expect(renderFileMock).toHaveBeenCalledWith({
+        templatePath: expect.any(String),
+        dirPath: path.join(process.cwd(), options.componentName),
+        fileName: `${options.componentName}.test.tsx`,
+        moduleName: options.componentName,
+        data: expect.any(Object),
+      })
+    })
   })
 })

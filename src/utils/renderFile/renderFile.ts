@@ -44,7 +44,7 @@ function renderFile({
 
               throw err
             }
-            console.log(
+            console.info(
               color.cyan.bgGreen.bold.underline(`Created ${fileName}`)
             )
           }

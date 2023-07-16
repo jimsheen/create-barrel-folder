@@ -3,14 +3,7 @@ import path from 'path'
 import createDir from '../createDir'
 import renderFile from '../renderFile'
 
-import {
-  EOptions,
-  EComponentType,
-  fileOptions,
-  defaultTemplateData,
-} from '../../constants'
-
-import { TFileOptions } from '../../types'
+import { EOptions, EComponentType, defaultConfig } from '../../constants'
 
 const componentTemplate = path.resolve(
   __dirname,
@@ -25,7 +18,7 @@ const testTemplate = path.resolve(__dirname, '../../templates/test.ejs')
 export type TCreateFilesOptions = {
   componentName: string
   componentType: EComponentType
-  options: TFileOptions
+  options: EOptions[]
 }
 
 const createFiles = async ({
@@ -42,8 +35,10 @@ const createFiles = async ({
     if (err) throw err
   }
 
+  const currentDefaultConfig = defaultConfig[componentType]
+
   // if options doesn't have a value that matches the key in defaultTemplateData then it will be set to false
-  const data = Object.keys(defaultTemplateData).reduce((acc, key) => {
+  const data = Object.keys(currentDefaultConfig).reduce((acc, key) => {
     if (options.includes(key as EOptions)) {
       return {
         ...acc,
@@ -60,7 +55,7 @@ const createFiles = async ({
   // create files
 
   // create barrel file
-  if (options.includes(fileOptions[EOptions.Barrel])) {
+  if (options.includes(EOptions.Barrel)) {
     const fileName = 'index.ts'
 
     renderFile({
@@ -98,7 +93,7 @@ const createFiles = async ({
   }
 
   // create styled
-  if (options.includes(fileOptions[EOptions.Styled])) {
+  if (options.includes(EOptions.Styled)) {
     const fileName = `${componentName}.styled.ts`
 
     renderFile({
@@ -111,7 +106,7 @@ const createFiles = async ({
   }
 
   // create story
-  if (options.includes(fileOptions[EOptions.Story])) {
+  if (options.includes(EOptions.Story)) {
     const fileName = `${componentName}.stories.tsx`
 
     renderFile({
@@ -124,7 +119,7 @@ const createFiles = async ({
   }
 
   // create test
-  if (options.includes(fileOptions[EOptions.Test])) {
+  if (options.includes(EOptions.Test)) {
     const fileName = `${componentName}.test.tsx`
 
     renderFile({
