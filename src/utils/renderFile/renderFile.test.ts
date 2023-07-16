@@ -1,23 +1,19 @@
-import ejs from 'ejs';
-import path from 'path';
-
-import renderFile from './renderFile';
+import ejs from 'ejs'
+import path from 'path'
+import renderFile from './renderFile'
 
 const templatePath = path.resolve(__dirname, './testTemplate.ejs')
+const mockRenderFile = jest.fn()
 
-const mockRenderFile = jest.fn();
-
-jest.spyOn(ejs, "renderFile").mockImplementation(mockRenderFile)
+jest.spyOn(ejs, 'renderFile').mockImplementation(mockRenderFile as any)
 
 test('should render a file and inject data and config to EJS template', () => {
+  const dirPath = 'dirPath'
+  const fileName = 'fileName'
+  const moduleName = 'moduleName'
+  const data: Record<string, unknown> = {}
+  const options: Record<string, unknown> = {}
 
-  // const templatePath = templatePath;
-  const dirPath = 'dirPath';
-  const fileName = 'fileName';
-  const moduleName = 'moduleName';
-  const data = {};
-  const options = {};
-  const config = {};
   renderFile({
     templatePath,
     dirPath,
@@ -25,11 +21,15 @@ test('should render a file and inject data and config to EJS template', () => {
     moduleName,
     data,
     options,
-    config
   })
 
-  expect(mockRenderFile).toHaveBeenCalledWith(templatePath, {
-    name: moduleName,
-    ...data,
-  }, options, expect.any(Function));
+  expect(mockRenderFile).toHaveBeenCalledWith(
+    templatePath,
+    {
+      name: moduleName,
+      ...data,
+    },
+    options,
+    expect.any(Function)
+  )
 })

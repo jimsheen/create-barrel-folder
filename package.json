@@ -1,32 +1,24 @@
 {
-  "name": "create-barrel-folder",
-  "version": "1.1.0",
+  "name": "@jimsheen/create-barrel-folder",
+  "version": "2.0.0",
   "description": "",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "umd:main": "dist/umd/index.js",
-  "types": "dist/types/index.d.js",
-  "bin": {
-    "cbf": "./dist/cjs/cli.js"
-  },
+  "main": "dist/index.js",
+  "exports": "./dist/index.js",
   "scripts": {
-    "postinstall": "husky install",
-    "prepublishOnly": "pinst --disable",
-    "postpublish": "pinst --enable",
-    "copy:cjs": "copyfiles -u 2 src/templates/**/*.ejs dist/cjs/templates",
-    "copy:esm": "copyfiles -u 2 src/templates/**/*.ejs dist/esm/templates",
-    "build": "npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:types",
-    "build:cjs": "node tools/cleanup cjs && tsc -p config/tsconfig.cjs.json && npm run copy:cjs",
-    "build:esm": "node tools/cleanup esm && tsc -p config/tsconfig.esm.json && npm run copy:esm",
-    "build:umd": "node tools/cleanup umd && webpack --config config/webpack.config.js",
-    "build:types": "node tools/cleanup types && tsc -p config/tsconfig.types.json",
-    "clean": "node tools/cleanup",
-    "package": "npm run build && npm pack",
-    "test": "jest --no-cache --runInBand",
-    "test:cov": "jest --coverage --no-cache --runInBand",
-    "test:watch": "jest --watchAll --no-cache --runInBand",
-    "addscope": "node tools/packagejson name @jimsheen/create-barrel-folder",
-    "postversion": "git push --follow-tags"
+    "clean": "rm -rf dist",
+    "copy": "copyfiles -u 2 src/templates/**/*.ejs dist/templates",
+    "build": "npm run clean && npm run copy && tsc --build",
+    "start": "npm run build && tsc --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint:fix": "eslint --fix src",
+    "package": "npm run build && npm pack"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "bin": {
+    "ggcbf": "./dist/index.js"
   },
   "publishConfig": {
     "access": "public"
@@ -54,9 +46,13 @@
     "url": "https://github.com/jimsheen/create-barrel-folder/issues"
   },
   "dependencies": {
+    "chalk": "^5.3.0",
     "command-line-args": "^5.2.0",
     "command-line-usage": "^6.1.1",
-    "ejs": "^3.1.6"
+    "console-log-colors": "^0.4.0",
+    "ejs": "^3.1.6",
+    "prompts": "^2.4.2",
+    "ts-node": "^10.9.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
@@ -65,6 +61,7 @@
     "@types/command-line-usage": "^5.0.2",
     "@types/ejs": "^3.1.0",
     "@types/jest": "^27.0.1",
+    "@types/prompts": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
     "copyfiles": "^2.4.1",
