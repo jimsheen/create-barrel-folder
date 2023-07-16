@@ -34,8 +34,6 @@ const handleAbort = ({ aborted }: { aborted: boolean }): void => {
 // merge default config with rc config
 const config = rc('ggcbf', defaultConfig)
 
-console.log('config :>> ', config)
-
 const start = async () => {
   // get component type
   const { componentType } = (await prompts([

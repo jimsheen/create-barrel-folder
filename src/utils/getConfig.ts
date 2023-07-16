@@ -21,6 +21,4 @@ const ggcbfConfig = loadRcFile('ggcbf')
 
 const config = merge(defaultConfig, ggcbfConfig)
 
-console.log('config :>> ', config)
-
 export default config
