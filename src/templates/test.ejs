@@ -1,15 +1,15 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react';
 
-import <%= name %>, { <%= name %>Props } from './<%= name %>'
+import <%= name %>, { T<%= name %>Props } from './<%= name %>'
 
-const defaultProps = {} as <%= name %>Props
+const defaultProps = {} as T<%= name %>Props
 
-const setup = (props?: <%= name %>Props) => {
+const setup = (props?: T<%= name %>Props) => {
   const newProps = {
   ...defaultProps,
   ...props
-  } as <%= name %>Props;
+  } as T<%= name %>Props;
 
   const utils = render(<<%= name %> {...newProps} />);
 
