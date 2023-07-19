@@ -48,7 +48,6 @@
     "url": "https://github.com/@jimsheen/create-barrel-folder/issues"
   },
   "dependencies": {
-    "@jimsheen/create-barrel-folder": "file:james-sheen-giffgaff-create-react-component-2.0.0.tgz",
     "console-log-colors": "^0.4.0",
     "ejs": "^3.1.9",
     "merge-deep": "^3.0.3",
